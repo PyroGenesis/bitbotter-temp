@@ -1,47 +1,49 @@
+import { NS } from "@ns";
+
 /** @param {NS} ns */
-export async function main(ns) {
-	let start = Date.now();
+export async function main(ns: NS) {
+	const start = Date.now();
 
 	// check for arguments
 	if (ns.args.length < 10) {
 		ns.print("Not enough arguments");
 		return;
 	}
-	let server = ns.args[0];
-	let host_server = ns.args[1];
-	let id = ns.args[2];
-	let port = parseInt(ns.args[3]);
+	const server = ns.args[0] as string;
+	const host_server = ns.args[1] as string;
+	const id = ns.args[2] as string;
+	const port = ns.args[3] as number;
 
-	let hack_threads = parseInt(ns.args[4]);
-	let weaken_1_threads = parseInt(ns.args[5]);
-	let grow_threads = parseInt(ns.args[6]);
-	let weaken_2_threads = parseInt(ns.args[7]);
+	const hack_threads = ns.args[4] as number;
+	const weaken_1_threads = ns.args[5] as number;
+	const grow_threads = ns.args[6] as number;
+	const weaken_2_threads = ns.args[7] as number;
 
-	let JOB_SPACER = parseInt(ns.args[8]);
+	const JOB_SPACER = ns.args[8] as number;
 	// let weaken_time = parseFloat(ns.args[9]);
 
 	// let hack_level_at_launch = ns.getHackingLevel();
-	let hack_time = ns.getHackTime(server);
-	let grow_time = ns.getGrowTime(server);
-	let weaken_time = ns.getWeakenTime(server);
+	const hack_time = ns.getHackTime(server);
+	const grow_time = ns.getGrowTime(server);
+	const weaken_time = ns.getWeakenTime(server);
 
-	let hack_end = weaken_time - JOB_SPACER;
-	let weaken_1_end = weaken_time;
-	let grow_end = weaken_1_end + JOB_SPACER;
-	let weaken_2_end = grow_end + JOB_SPACER;
+	const hack_end = weaken_time - JOB_SPACER;
+	const weaken_1_end = weaken_time;
+	const grow_end = weaken_1_end + JOB_SPACER;
+	const weaken_2_end = grow_end + JOB_SPACER;
 
-	let hack_start = hack_end - hack_time;
-	let weaken_1_start = weaken_1_end - weaken_time;
-	let grow_start = grow_end - grow_time;
-	let weaken_2_start = weaken_2_end - weaken_time;
+	const hack_start = hack_end - hack_time;
+	const weaken_1_start = weaken_1_end - weaken_time;
+	const grow_start = grow_end - grow_time;
+	const weaken_2_start = weaken_2_end - weaken_time;
 
 	// ns.disableLog("sleep");
 	ns.clearLog();
 	ns.print("Script start");
 
-	let hack_script = "/hack/hack_once.js";
-	let grow_script = "/hack/grow_once.js";
-	let weaken_script = "/hack/weaken_once.js";
+	const hack_script = "/hack/hack_once.js";
+	const grow_script = "/hack/grow_once.js";
+	const weaken_script = "/hack/weaken_once.js";
 	// let LAUNCH_SPACER = JOB_SPACER / 2;
 
 	let hack_PID = null;

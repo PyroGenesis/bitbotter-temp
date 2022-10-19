@@ -1,6 +1,6 @@
 import { NS } from "@ns";
 
-const exec_script = "/hack/exec.js";
+const exec_script = "/tools/exec.js";
 // const hack_script = "/hack/just_hack.js";
 // const grow_script = "/hack/just_grow.js";
 const weaken_script = "/hack/just_weaken.js";

@@ -1,9 +1,10 @@
-import { copyAndExec } from './lib/utils.js'
+import { NS } from "@ns";
+import { copyAndExec } from '/lib/utils';
 
 /** 
  * @param {NS} ns 
 */
-function printArgs(ns) {
+function printArgs(ns: NS) {
 	ns.tprint("Arguments needed for exec.js");
 	ns.tprint("server     Server to execute on");
 	ns.tprint("threads    The number of threads that will used to run the script. Enter 'all' to run the maximum possible amount.");
@@ -12,7 +13,7 @@ function printArgs(ns) {
 }
 
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns: NS) {
 	// help
 	if (ns.args.length === 1 && ns.args[0] === 'help') {
 		printArgs(ns);
@@ -24,9 +25,9 @@ export async function main(ns) {
 		ns.print("Not enough arguments");
 		return;
 	}
-	let server = ns.args[0];
-	let threads = ns.args[1];
-	let script = ns.args[2];
+	const server = ns.args[0] as string;
+	const threads = ns.args[1] as number | "all";
+	const script = ns.args[2] as string;
 
 	await copyAndExec(ns, server, script, threads, ...ns.args.slice(3));
 }

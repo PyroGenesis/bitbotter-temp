@@ -1,4 +1,5 @@
-import { getServerList } from './lib/utils.js'
+import { NS } from "@ns";
+import { getServerList } from 'lib/utils';
 
 // const batcher_script = "/hack/batcher.js";
 // const dispatch_script = "/hack/dispatcher.js";
@@ -6,28 +7,28 @@ import { getServerList } from './lib/utils.js'
 const grow_script = "/hack/wait_grow.js";
 const weaken_script = "/hack/wait_weaken.js";
 
-const JOB_SPACER = 500;
-const BATCH_SPACER = 500;
+// const JOB_SPACER = 500;
+// const BATCH_SPACER = 500;
 const GROW_PER_WEAKEN = 12;
 
 /** 
  * @param {NS} ns 
 */
-function getServerAvailableRam(ns) {
+function getServerAvailableRam(ns: NS) {
 	return ns.getServer().maxRam - ns.getServer().ramUsed;
 }
 
 /** 
  * @param {NS} ns 
 */
-function printArgs(ns) {
+function printArgs(ns: NS) {
 	ns.tprint("No arguments needed for preparer_home.js");
 	// ns.tprint("server    Server to hack");
 	// ns.tprint("port      Port to out details on");
 }
 
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns: NS) {
 	// help
 	if (ns.args.length === 1 && ns.args[0] === 'help') {
 		printArgs(ns);
@@ -41,7 +42,7 @@ export async function main(ns) {
 	// }
 	// let server = ns.args[0];
 	// let port = parseInt(ns.args[1]);
-	let host_server = ns.getServer().hostname
+	const host_server = ns.getHostname();
 	
 	// disable default logs
 	ns.disableLog("getServerMinSecurityLevel");
@@ -62,11 +63,11 @@ export async function main(ns) {
 	// unique identifier for each batch
 	let id = 0;
 
-	for (let server of getServerList(ns)) {
+	for (const server of getServerList(ns)) {
 		// let min_security = ns.getServerMinSecurityLevel(server.name);
 		// let max_money = ns.getServerMaxMoney(server.name);
 
-		let weaken_time = ns.getWeakenTime(server.name);
+		const weaken_time = ns.getWeakenTime(server.name);
 		let finish_at = weaken_time;
 
 		// weaken first
@@ -76,7 +77,7 @@ export async function main(ns) {
 			// threads we can make currently
 			let weak_threads_possible_curr = Math.floor(getServerAvailableRam(ns) / 1.75);
 			// threads we can make in ideal scenario (only this script running)
-			let weak_threads_possible_max = Math.floor((ns.getServer().maxRam - ns.getScriptRam(ns.getScriptName())) / 1.75);
+			const weak_threads_possible_max = Math.floor((ns.getServer().maxRam - ns.getScriptRam(ns.getScriptName())) / 1.75);
 			// let weak_threads = Math.min(weak_threads_needed, weak_threads_possible_curr);
 
 			// lower threads needed if just not possible
@@ -103,16 +104,16 @@ export async function main(ns) {
 		// then grow-weaken
 		if (ns.getServerMoneyAvailable(server.name) < server.max_money) {
 			// grow weaken batch
-			let grow_multipler_required = server.max_money / ns.getServerMoneyAvailable(server.name);
+			const grow_multipler_required = server.max_money / ns.getServerMoneyAvailable(server.name);
 			// batches needed to attain 100% cash
 			let batches_needed = Math.ceil(ns.growthAnalyze(server.name, grow_multipler_required, ns.getServer().cpuCores));
 
-			let jobs = GROW_PER_WEAKEN + 1
-			let ram_per_batch = jobs * 1.75;
+			const jobs = GROW_PER_WEAKEN + 1
+			const ram_per_batch = jobs * 1.75;
 			// batches we can make currently
 			let batches_possible_curr = Math.floor(getServerAvailableRam(ns) / ram_per_batch);
 			// batches we can make in ideal scenario (only this script running)
-			let batches_possible_max = Math.floor((ns.getServer().maxRam - ns.getScriptRam(ns.getScriptName())) / ram_per_batch);
+			const batches_possible_max = Math.floor((ns.getServer().maxRam - ns.getScriptRam(ns.getScriptName())) / ram_per_batch);
 
 			// lower batches needed if just not possible
 			batches_needed = Math.min(batches_needed, batches_possible_max);

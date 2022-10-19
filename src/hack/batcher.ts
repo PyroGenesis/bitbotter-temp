@@ -1,3 +1,5 @@
+import { NS, Server } from "@ns";
+
 const dispatch_script = "/hack/dispatcher.js";
 const hack_script = "/hack/hack_once.js";
 const grow_script = "/hack/grow_once.js";
@@ -9,6 +11,11 @@ const BATCH_SPACER = 500;
 class LevelBasedParams {
 	// the security decreased by a single weaken thread (this is fixed and does not decrease per hacking level)
 	static weaken_security_dec = 0.05;
+
+	ns: NS;
+	server: string;
+	server_obj: Server;
+	max_money: number;
 
 	hack_threads = 0;
 	weaken_1_threads = 0;
@@ -22,7 +29,7 @@ class LevelBasedParams {
 	 * @param {NS} ns 
 	 * @param {string} server 
 	 */
-	constructor(ns, server) {
+	constructor(ns: NS, server: string) {
 		this.ns = ns;
 		this.server = server;
 		this.server_obj = ns.getServer(server);
@@ -34,14 +41,14 @@ class LevelBasedParams {
 	update() {
 		// the hack threads for stealing <= 50% money and their security increase
 		this.hack_threads = Math.floor(this.ns.hackAnalyzeThreads(this.server, this.max_money * 0.5));
-		let hack_security_inc = 0.002 * this.hack_threads; //this.ns.hackAnalyzeSecurity(this.hack_threads, this.server);
+		const hack_security_inc = 0.002 * this.hack_threads; //this.ns.hackAnalyzeSecurity(this.hack_threads, this.server);
 
 		// the number of weaken threads required to offset hack increase
 		this.weaken_1_threads = Math.ceil(hack_security_inc / LevelBasedParams.weaken_security_dec);
 
 		// the number of threads needed to double the money back to 100% and their security increase
 		this.grow_threads = Math.ceil(this.ns.growthAnalyze(this.server, 2));
-		let grow_security_inc = 0.004 * this.grow_threads; //this.ns.growthAnalyzeSecurity(this.grow_threads, this.server, 1);
+		const grow_security_inc = 0.004 * this.grow_threads; //this.ns.growthAnalyzeSecurity(this.grow_threads, this.server, 1);
 
 		// the number of weaken threads required to offset hack increase
 		this.weaken_2_threads = Math.ceil(grow_security_inc / LevelBasedParams.weaken_security_dec);
@@ -61,9 +68,9 @@ class LevelBasedParams {
 /**
  * @param {NS} ns 
  */
-function getDispatchCount(ns) {
+function getDispatchCount(ns: NS) {
 	let dispatchers = 0;
-	for (let p of ns.ps()) {
+	for (const p of ns.ps()) {
 		if (p.filename === dispatch_script) {
 			dispatchers++;
 		}
@@ -75,10 +82,10 @@ function getDispatchCount(ns) {
  * @param {NS} ns 
  * @param {number} ram_per_batch
 */
-function getServerSafeRam(ns, ram_per_batch) {
-	let ram_used_actual = ns.getServer().ramUsed;
-	let ram_used_predicted = ns.getScriptRam(ns.getScriptName()) + getDispatchCount(ns) * ram_per_batch;
-	let ram_used = Math.max(ram_used_actual, ram_used_predicted);
+function getServerSafeRam(ns: NS, ram_per_batch: number) {
+	const ram_used_actual = ns.getServer().ramUsed;
+	const ram_used_predicted = ns.getScriptRam(ns.getScriptName()) + getDispatchCount(ns) * ram_per_batch;
+	const ram_used = Math.max(ram_used_actual, ram_used_predicted);
 
 	return ns.getServer().maxRam - ram_used;
 }
@@ -86,14 +93,14 @@ function getServerSafeRam(ns, ram_per_batch) {
 /** 
  * @param {NS} ns 
 */
-function printArgs(ns) {
+function printArgs(ns: NS) {
 	ns.tprint("Arguments needed for batcher.js");
 	ns.tprint("server    Server to hack");
 	ns.tprint("port      Port to out details on");
 }
 
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns: NS) {
 	// help
 	if (ns.args.length === 1 && ns.args[0] === 'help') {
 		printArgs(ns);
@@ -105,9 +112,9 @@ export async function main(ns) {
 		ns.tprint("Not enough arguments");
 		return;
 	}
-	let server = ns.args[0];
-	let port = parseInt(ns.args[1]);
-	let host_server = ns.getServer().hostname;
+	const server = ns.args[0] as string;
+	const port = ns.args[1] as number;
+	const host_server = ns.getHostname();
 	
 	// disable default logs
 	ns.disableLog("getServerMinSecurityLevel");
@@ -125,8 +132,8 @@ export async function main(ns) {
 	ns.tail();
 
 	// first make sure that security is lowest and money is highest
-	let min_security = ns.getServerMinSecurityLevel(server);
-	let max_money = ns.getServerMaxMoney(server);
+	const min_security = ns.getServerMinSecurityLevel(server);
+	const max_money = ns.getServerMaxMoney(server);
 	if (ns.getServerSecurityLevel(server) > min_security) {
 		ns.tprint("Server needs to be weakened more");
 		return;
@@ -148,10 +155,11 @@ export async function main(ns) {
 	// hack level to refresh times
 	let hack_level = ns.getHackingLevel();
 	// thread vars
-	let params = new LevelBasedParams(ns, server);
+	const params = new LevelBasedParams(ns, server);
 	// server object
 	// let server_obj = ns.getServer(server);
 	
+	// eslint-disable-next-line no-constant-condition
 	while (true) {
 		// need to update thread and timings if hacking level increases
 		if (hack_level !== ns.getHackingLevel()) {

@@ -1,6 +1,6 @@
 /** @param {NS} ns */
 export async function main(ns) {
-	let host_server = ns.getServer().hostname;
+	let host_server = ns.getHostname();
 	
 	// kills all dispatch and hack scripts because timings will no longer be consistent
 	ns.scriptKill("/hack/batcher.js", host_server);

@@ -9,8 +9,8 @@ export async function main(ns) {
 	// spawn the script
 	let script = ns.args[0]
 	// if not home, copy the script to be executed from home
-	if (ns.getServer().hostname !== 'home') {
-		ns.scp(script, ns.getServer().hostname, 'home');
+	if (ns.getHostname() !== 'home') {
+		ns.scp(script, ns.getHostname(), 'home');
 	}
 
 	// ns.print(ns.getServer().maxRam, " ", ns.getScriptRam(script))

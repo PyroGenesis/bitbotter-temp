@@ -1,15 +1,17 @@
+import { NS } from "@ns";
+
 /** 
  * @param {NS} ns 
 */
-function printArgs(ns) {
-	ns.tprint("Arguments needed for hack_once.js");
+function printArgs(ns: NS) {
+	ns.tprint("Arguments needed for grow_once.js");
 	ns.tprint("server    Server to hack");
 	ns.tprint("id        Unique identifier to be able to run duplicates");
 	ns.tprint("port      Optional. Port to out details on");
 }
 
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns: NS) {
 	// help
 	if (ns.args.length === 1 && ns.args[0] === 'help') {
 		printArgs(ns);
@@ -21,15 +23,15 @@ export async function main(ns) {
 		ns.print("Not enough arguments");
 		return;
 	}
-	let server = ns.args[0];
-	let id = ns.args[1];
+	const server = ns.args[0] as string;
+	const id = ns.args[1] as string;
 	let port = null;
 	if (ns.args.length > 2) {
-		port = parseInt(ns.args[2]);
+		port = ns.args[2] as number;
 	}
 
-	let money = await ns.hack(server);
+	const growth = await ns.grow(server);
 	if (port !== null) {
-		await ns.writePort(port, `Finished hack ${id}, stole: ${ns.nFormat(money, "$0.000a")}`);
-	}	
+		await ns.writePort(port, `Finished grow ${id}, growth: ${ns.nFormat(growth, "0.00%")}`);
+	}
 }
