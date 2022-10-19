@@ -1,20 +1,32 @@
-/** @param {NS} ns 
+import { NS } from "@ns";
+
+export interface ServerDetail {
+	name: string; 
+	max_money: number; 
+	max_ram: number; 
+	min_security: number;
+}
+
+/** 
+ *  @param {NS} ns 
  *  @param {string} server
  *  @param {string} script
+ *  @param {number | "all"} threads
+ *  @param {...(string | number | boolean)} args
 */
-export async function copyAndExec(ns, server, script, threads, ...args) {
+export async function copyAndExec(ns: NS, server: string, script: string, threads: number | "all", ...args: (string | number | boolean)[]) {
 	if (server === "home" || !ns.hasRootAccess(server)) {
 		ns.print(`Don't have root on ${server}`);
 		return;
 	}
 
-	if (!await ns.scp(script, server, "home")) {
-		ns.print(`Failed to copy ${script} to ${server}`);
+	if (!ns.scp(script, server, "home")) {
+		ns.tprint(`Failed to copy ${script} to ${server}`);
 		return;
 	}
 
 	// threads
-	if (threads == "all") {
+	if (threads === "all") {
 		threads = Math.floor((ns.getServerMaxRam(server) - ns.getServerUsedRam(server)) / ns.getScriptRam(script, server));
 	}
 
@@ -26,14 +38,14 @@ export async function copyAndExec(ns, server, script, threads, ...args) {
 /** 
  * @param {NS} ns
 */
-export function getServerList(ns) {
-	let servers = new Set();
-	let server_list = [];
+export function getServerList(ns: NS) {
+	const servers = new Set();
+	const server_list: ServerDetail[] = [];
 
 	/** @param {NS} ns 
 	 *  @param {string} server
 	*/
-	function recurse(ns, server) {
+	function recurse(ns: NS, server: string) {
 		servers.add(server);
 
 		// get all details
@@ -47,8 +59,8 @@ export function getServerList(ns) {
 		}
 
 		// populate neighbors for hacking
-		let neighbors = ns.scan(server);
-		for (let neighbor of neighbors) {
+		const neighbors = ns.scan(server);
+		for (const neighbor of neighbors) {
 			if (servers.has(neighbor)) continue;
 
 			recurse(ns, neighbor);
