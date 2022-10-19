@@ -19,7 +19,7 @@ export async function main(ns) {
 	// ns.print("Script start");
 
 	// copy the files over
-	let scripts = ["/scripts/just_hack.js", "/scripts/just_grow.js", "/scripts/just_weaken.js"];
+	let scripts = ["/hack/just_hack.js", "/hack/just_grow.js", "/hack/just_weaken.js"];
 	await ns.scp(scripts, exec_server, "home");
 
 	// kill anything running before

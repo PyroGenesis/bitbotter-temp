@@ -1,4 +1,4 @@
-import { copyAndExec } from "/scripts/lib/utils.js";
+import { copyAndExec } from "../lib/utils.js";
 
 let servers = new Set()
 
@@ -17,7 +17,7 @@ async function recurse(ns, server) {
 	servers.add(server);
 
 	// run hacker
-	await copyAndExec(ns, server, '/scripts/just_hack.js', 'n00dles');
+	await copyAndExec(ns, server, '/hack/just_hack.js', 'n00dles');
 
 	// populate neighbors for hacking
 	let neighbors = ns.scan(server);

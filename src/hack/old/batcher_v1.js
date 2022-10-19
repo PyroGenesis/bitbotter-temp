@@ -43,9 +43,9 @@ export async function main(ns) {
 	}
 
 	// copy the files over
-	let hack_script = "/scripts/wait_hack.js"
-	let grow_script = "/scripts/wait_grow.js"
-	let weaken_script = "/scripts/wait_weaken.js"
+	let hack_script = "/hack/wait_hack.js"
+	let grow_script = "/hack/wait_grow.js"
+	let weaken_script = "/hack/wait_weaken.js"
 	await ns.scp([hack_script, grow_script, weaken_script], host_server, "home");
 
 	// kill anything running before

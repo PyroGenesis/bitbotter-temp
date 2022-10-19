@@ -1,8 +1,8 @@
-const batcher_script = "/scripts/batcher.js";
-const dispatch_script = "/scripts/dispatcher.js";
-const hack_script = "/scripts/hack_once.js";
-const grow_script = "/scripts/grow_once.js";
-const weaken_script = "/scripts/weaken_once.js";
+const batcher_script = "/hack/batcher.js";
+const dispatch_script = "/hack/dispatcher.js";
+const hack_script = "/hack/hack_once.js";
+const grow_script = "/hack/grow_once.js";
+const weaken_script = "/hack/weaken_once.js";
 
 const JOB_SPACER = 500;
 const BATCH_SPACER = 500;

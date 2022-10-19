@@ -1,4 +1,4 @@
-import { copyAndExec } from '/scripts/lib/utils.js'
+import { copyAndExec } from './lib/utils.js'
 
 /** 
  * @param {NS} ns 

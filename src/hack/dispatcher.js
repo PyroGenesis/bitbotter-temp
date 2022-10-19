@@ -39,9 +39,9 @@ export async function main(ns) {
 	ns.clearLog();
 	ns.print("Script start");
 
-	let hack_script = "/scripts/hack_once.js";
-	let grow_script = "/scripts/grow_once.js";
-	let weaken_script = "/scripts/weaken_once.js";
+	let hack_script = "/hack/hack_once.js";
+	let grow_script = "/hack/grow_once.js";
+	let weaken_script = "/hack/weaken_once.js";
 	// let LAUNCH_SPACER = JOB_SPACER / 2;
 
 	let hack_PID = null;

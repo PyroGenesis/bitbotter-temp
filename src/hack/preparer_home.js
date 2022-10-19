@@ -1,10 +1,10 @@
-import { getServerList } from '/scripts/lib/utils.js'
+import { getServerList } from './lib/utils.js'
 
-// const batcher_script = "/scripts/batcher.js";
-// const dispatch_script = "/scripts/dispatcher.js";
-// const hack_script = "/scripts/hack_once.js";
-const grow_script = "/scripts/wait_grow.js";
-const weaken_script = "/scripts/wait_weaken.js";
+// const batcher_script = "/hack/batcher.js";
+// const dispatch_script = "/hack/dispatcher.js";
+// const hack_script = "/hack/hack_once.js";
+const grow_script = "/hack/wait_grow.js";
+const weaken_script = "/hack/wait_weaken.js";
 
 const JOB_SPACER = 500;
 const BATCH_SPACER = 500;
@@ -144,5 +144,5 @@ export async function main(ns) {
 	// ns.scp([batcher_script], host_server, "home");
 
 	// run it again
-	// ns.spawn("/scripts/preparer_home.js", 1);
+	// ns.spawn("/hack/preparer_home.js", 1);
 }

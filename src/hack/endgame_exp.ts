@@ -1,9 +1,9 @@
 import { NS } from "@ns";
 
-const exec_script = "/scripts/exec.js";
-// const hack_script = "/scripts/just_hack.js";
-// const grow_script = "/scripts/just_grow.js";
-const weaken_script = "/scripts/just_weaken.js";
+const exec_script = "/hack/exec.js";
+// const hack_script = "/hack/just_hack.js";
+// const grow_script = "/hack/just_grow.js";
+const weaken_script = "/hack/just_weaken.js";
 
 /** @param {NS} ns */
 export async function main(ns: NS) {	
